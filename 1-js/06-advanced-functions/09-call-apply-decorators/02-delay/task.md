@@ -2,25 +2,25 @@ importance: 5
 
 ---
 
-# Delaying decorator
+# Forsinkelses decorator
 
-Create a decorator `delay(f, ms)` that delays each call of `f` by `ms` milliseconds.
+Opret en decorator `delay(f, ms)` der forsinker hvert kald af `f` med `ms` millisekunder.
 
-For instance:
+For eksempel:
 
 ```js
 function f(x) {
   alert(x);
 }
 
-// create wrappers
+// Opret wrappers der forsinker kaldet af f med 1000ms og 1500ms
 let f1000 = delay(f, 1000);
 let f1500 = delay(f, 1500);
 
-f1000("test"); // shows "test" after 1000ms
-f1500("test"); // shows "test" after 1500ms
+f1000("test"); // viser "test" efter 1000ms
+f1500("test"); // viser "test" efter 1500ms
 ```
 
-In other words, `delay(f, ms)` returns a "delayed by `ms`" variant of `f`.
+Med andre ord: `delay(f, ms)` returner en udgave af `f` der er "forsinket med `ms` millisekunder".
 
-In the code above, `f` is a function of a single argument, but your solution should pass all arguments and the context `this`.
+I koden ovenfor er `f` en funktion med et enkelt argument, men din løsning skal videregive alle argumenter og konteksten `this`.

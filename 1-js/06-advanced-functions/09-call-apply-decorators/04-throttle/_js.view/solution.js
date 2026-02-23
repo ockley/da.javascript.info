@@ -7,23 +7,23 @@ function throttle(func, ms) {
   function wrapper() {
 
     if (isThrottled) {
-      // memo last arguments to call after the cooldown
+      // memoriser sidste sæt argumenter der skal kaldes efter cooldown
       savedArgs = arguments;
       savedThis = this;
       return;
     }
 
-    // otherwise go to cooldown state
+    // ellers gå til cooldown state
     func.apply(this, arguments);
 
     isThrottled = true;
 
-    // plan to reset isThrottled after the delay
+    // planlæg at nulstille isThrottled efter forsinkelsen
     setTimeout(function() {
       isThrottled = false;
       if (savedArgs) {
-        // if there were calls, savedThis/savedArgs have the last one
-        // recursive call runs the function and sets cooldown again
+        // hvis der har været yderligere kald har savedThis/savedArgs de sidste
+        // rekursivt kald kører funktionen og sætter cooldown igen
         wrapper.apply(savedThis, savedArgs);
         savedArgs = savedThis = null;
       }

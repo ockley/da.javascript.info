@@ -1,24 +1,32 @@
 <!doctype html>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/lodash.js/4.17.11/lodash.js"></script>
 
-Function <code>handler</code> is called on this input:
-<br>
-<input id="input1" placeholder="type here">
+Funktion
+<code>handler</code>
+kaldes på dette input:
+<br />
+<input id="input1" placeholder="skriv her" />
 
 <p>
-
-Debounced function <code>debounce(handler, 1000)</code> is called on this input:
-<br>
-<input id="input2" placeholder="type here">
+  Debounced funktion
+  <code>debounce(handler, 1000)</code>
+  kaldes på dette input:
+  <br />
+  <input id="input2" placeholder="skriv her" />
+</p>
 
 <p>
-<button id="result">The <code>handler</code> puts the result here</button>
+  <button id="result">
+    <code>Handleren</code>
+    putter resultatet her
+  </button>
 
-<script>
-  function handler(event) {
-    result.innerHTML = event.target.value;
-  }
+  <script>
+    function handler(event) {
+      result.innerHTML = event.target.value;
+    }
 
-  input1.oninput = handler;
-  input2.oninput = _.debounce(handler, 1000);
-</script>
+    input1.oninput = handler;
+    input2.oninput = _.debounce(handler, 1000);
+  </script>
+</p>
