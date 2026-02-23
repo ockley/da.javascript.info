@@ -2,9 +2,9 @@ importance: 5
 
 ---
 
-# Bound function as a method
+# Bundet funktion som en metode
 
-What will be the output?
+Hvad vil output'et være?
 
 ```js
 function f() {

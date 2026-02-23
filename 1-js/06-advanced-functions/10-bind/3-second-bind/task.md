@@ -2,11 +2,11 @@ importance: 5
 
 ---
 
-# Second bind
+# Anden binding
 
-Can we change `this` by additional binding?
+Kan vi ændre `this` ved yderligere binding?
 
-What will be the output?
+Hvad vil output'et være?
 
 ```js no-beautify
 function f() {

@@ -2,9 +2,9 @@ importance: 5
 
 ---
 
-# Function property after bind
+# Funktionsegenskab efter binding
 
-There's a value in the property of a function. Will it change after `bind`? Why, or why not?
+Der er en værdi i en egenskab af en funktion. Vil den ændre sig efter `bind`? Hvorfor, eller hvorfor ikke?
 
 ```js run
 function sayHi() {
@@ -17,7 +17,7 @@ let bound = sayHi.bind({
   name: "John"
 });
 
-alert( bound.test ); // what will be the output? why?
+alert( bound.test ); // hvad vil output'et være? hvorfor?
 */!*
 ```
 
