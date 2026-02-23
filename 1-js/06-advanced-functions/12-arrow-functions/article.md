@@ -1,31 +1,31 @@
-# Arrow functions revisited
+# Arrow funktioner genbesøgt
 
-Let's revisit arrow functions.
+Lad os se på arrow funktioner igen.
 
-Arrow functions are not just a "shorthand" for writing small stuff. They have some very specific and useful features.
+Arrow funktioner er ikke bare en "shorthand" for at skrive kode der fylder lidt. De har nogle meget specifikke og nyttige features.
 
-JavaScript is full of situations where we need to write a small function that's executed somewhere else.
+JavaScript er fuld af situationer hvor vi skal skrive en lille funktion, som skal køres et andet sted.
 
-For instance:
+For eksempel:
 
-- `arr.forEach(func)` -- `func` is executed by `forEach` for every array item.
-- `setTimeout(func)` -- `func` is executed by the built-in scheduler.
-- ...there are more.
+- `arr.forEach(func)` -- `func` kaldes af `forEach` for hvert element i arrayet.
+- `setTimeout(func)` -- `func` kaldes af den indbyggede planlægger.
+- ...der er flere.
 
-It's in the very spirit of JavaScript to create a function and pass it somewhere.
+Det ligger i JavaScript's ånd at oprette funktioner og give dem videre til andre.
 
-And in such functions we usually don't want to leave the current context. That's where arrow functions come in handy.
+Og i sådanne funktioner ønsker vi normalt ikke at forlade den nuværende kontekst. Det er hvor arrow funktioner kommer ind i spil.
 
-## Arrow functions have no "this"
+## Arrow funktioner har ingen "this"
 
-As we remember from the chapter <info:object-methods>, arrow functions do not have `this`. If `this` is accessed, it is taken from the outside.
+Som vi husker fra kapitlet <info:object-methods>, har arrow funktioner ingen `this`. Hvis `this` tilgås, tages det fra det ydre område.
 
-For instance, we can use it to iterate inside an object method:
+For eksempel kan vi bruge det til at iterere inde i en objektmetode:
 
 ```js run
 let group = {
-  title: "Our Group",
-  students: ["John", "Pete", "Alice"],
+  title: "Vores gruppe",
+  students: ["Martin", "Pia", "Hanne"],
 
   showList() {
 *!*
@@ -39,14 +39,14 @@ let group = {
 group.showList();
 ```
 
-Here in `forEach`, the arrow function is used, so `this.title` in it is exactly the same as in the outer method `showList`. That is: `group.title`.
+Her i `forEach` bliver arrow funktionen brugt så `this.title` i den er præcist den samme som i den ydre metode `showList` ... som er: `group.title`.
 
-If we used a "regular" function, there would be an error:
+Hvis vi brugte en "regulær" funktion ville vi få en fejl:
 
 ```js run
 let group = {
-  title: "Our Group",
-  students: ["John", "Pete", "Alice"],
+  title: "Vores gruppe",
+  students: ["Martin", "Pia", "Hanne"],
 
   showList() {
 *!*
@@ -61,28 +61,28 @@ let group = {
 group.showList();
 ```
 
-The error occurs because `forEach` runs functions with `this=undefined` by default, so the attempt to access `undefined.title` is made.
+Fejlen sker fordi `forEach` kører funktioner med `this=undefined` som standard så den prøver at tilgå `undefined.title`.
 
-That doesn't affect arrow functions, because they just don't have `this`.
+Det sker ikke med arrow funktioner fordi de ikke har noget eget `this`.
 
-```warn header="Arrow functions can't run with `new`"
-Not having `this` naturally means another limitation: arrow functions can't be used as constructors. They can't be called with `new`.
+```warn header="Arrow funktioner kan ikke køre med `new`"
+Det, ikke at have eget `this` giver selvfølgelig også nogle begrænsninger: arrow funktioner kan ikke bruges som konstruktører (constructors). De kan ikke kaldes med `new`.
 ```
 
-```smart header="Arrow functions VS bind"
-There's a subtle difference between an arrow function `=>` and a regular function called with `.bind(this)`:
+```smart header="Arrow funktioner VS bind"
+Der er en lille forskel mellem en arrow funktion `=>` og en regulær funktion kaldt med `.bind(this)`:
 
-- `.bind(this)` creates a "bound version" of the function.
-- The arrow `=>` doesn't create any binding. The function simply doesn't have `this`. The lookup of `this` is made exactly the same way as a regular variable search: in the outer lexical environment.
+- `.bind(this)` skaber en "bundet version" af funktionen.
+- arrow `=>` skaber ingen binding. Funktionen har simpelthen ikke noget `this`. Et opslag af `this` udføres på præcis samme måde som en hver anden opslag til variable: i dens ydre leksikale miljø.
 ```
 
-## Arrows have no "arguments"
+## Arrows har ingen "arguments"
 
-Arrow functions also have no `arguments` variable.
+Arrow funktioner har heller ikke variablen `arguments`.
 
-That's great for decorators, when we need to forward a call with the current `this` and `arguments`.
+Det er perfekt for decorators når vi skal videresende et kald med det aktuelle `this` og `arguments`.
 
-For instance, `defer(f, ms)` gets a function and returns a wrapper around it that delays the call by `ms` milliseconds:
+FFor eksempel modtager `defer(f, ms)` en funktion og returnerer en wrapper der forsinker kaldet til funktionen med `ms` millisekunder:
 
 ```js run
 function defer(f, ms) {
@@ -92,14 +92,14 @@ function defer(f, ms) {
 }
 
 function sayHi(who) {
-  alert('Hello, ' + who);
+  alert('Hej ' + who);
 }
 
 let sayHiDeferred = defer(sayHi, 2000);
-sayHiDeferred("John"); // Hello, John after 2 seconds
+sayHiDeferred("Karsten"); // Hej, Karsten efter 2 sekunder
 ```
 
-The same without an arrow function would look like:
+Det samme uden arrow funktion vil se således ud:
 
 ```js
 function defer(f, ms) {
@@ -112,15 +112,15 @@ function defer(f, ms) {
 }
 ```
 
-Here we had to create additional variables `args` and `ctx` so that the function inside `setTimeout` could take them.
+Her er vi nødt til at oprette yderligere variable (`args` og `ctx`) så funktionen inde i `setTimeout` kan modtage dem.
 
-## Summary
+## Opsummering
 
-Arrow functions:
+Arrow funktioner:
 
-- Do not have `this`
-- Do not have `arguments`
-- Can't be called with `new`
-- They also don't have `super`, but we didn't study it yet. We will on the chapter <info:class-inheritance>
+- Har ikke noget `this`
+- Har ikke variablen `arguments`
+- Kan ikke kaldes med `new`
+- De har heller ikke nogen `super`, men det har vi ikke set på endnu. Det gør vi i kapitlet <info:class-inheritance>
 
-That's because they are meant for short pieces of code that do not have their own "context", but rather work in the current one. And they really shine in that use case.
+Det er fordi de er beregnet til mindre kodestykker der ikke arbejder med egen kontekst men beror på den aktuelle under afvikling. Og det er de til gengæld virkelig gode til.
