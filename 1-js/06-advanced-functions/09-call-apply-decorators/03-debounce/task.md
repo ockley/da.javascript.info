@@ -4,19 +4,19 @@ importance: 5
 
 # Debounce decorator
 
-The result of `debounce(f, ms)` decorator is a wrapper that suspends calls to `f` until there's `ms` milliseconds of inactivity (no calls, "cooldown period"), then invokes `f` once with the latest arguments.
+Resultatet af en `debounce(f, ms)` decorator er en wrapper der suspenderer kaldet til `f` indtil der er `ms` millisekunder af inaktivitet (ingen kald, "cooldown period"), så kalder den `f` én gang med de seneste argumenter.
 
-In other words, `debounce` is like a secretary that accepts "phone calls", and waits until there's `ms` milliseconds of being quiet. And only then it transfers the latest call information to "the boss" (calls the actual `f`).
+Med andre ord er `debounce` som en sekretær der tager imod "telefonopkald" og venter ind til der har været `ms` millisekunder af inaktivitet. Og først da overfører den de seneste opkaldsoplysninger til "chefen" (kalder den faktiske `f`).
 
-For instance, we had a function `f` and replaced it with `f = debounce(f, 1000)`.
+For eksempel, vi havde en funktion `f` og erstattede den med `f = debounce(f, 1000)`.
 
-Then if the wrapped function is called at 0ms, 200ms and 500ms, and then there are no calls, then the actual `f` will be only called once, at 1500ms. That is: after the cooldown period of 1000ms from the last call.
+Hvis den omgivende funktion kaldes ved 0ms, 200ms og 500ms, og der ikke er flere kald efter det, vil den faktiske `f` kun blive kaldt én gang, ved 1500ms. Det vil sige: efter cooldown-perioden på 1000ms fra det sidste kald.
 
 ![](debounce.svg)
 
-...And it will get the arguments of the very last call, other calls are ignored.
+...og vi vil få argumenterne fra det sidste kald, andre kald ignoreres.
 
-Here's the code for it (uses the debounce decorator from the [Lodash library](https://lodash.com/docs/4.17.15#debounce)):
+Her er koden for det (som bruger debounce decorator fra [Lodash biblioteket](https://lodash.com/docs/4.17.15#debounce)):
 
 ```js
 let f = _.debounce(alert, 1000);
@@ -24,28 +24,28 @@ let f = _.debounce(alert, 1000);
 f("a");
 setTimeout( () => f("b"), 200);
 setTimeout( () => f("c"), 500);
-// debounced function waits 1000ms after the last call and then runs: alert("c")
+// debounced funktion venter 1000ms efter det sidste kald og kalder så alert("c")
 ```
 
-Now a practical example. Let's say, the user types something, and we'd like to send a request to the server when the input is finished.
+Nu til et praktisk eksempel. Lad os sige, at brugeren skriver noget, og vi vil sende en forespørgsel til serveren når inputtet er færdigt.
 
-There's no point in sending the request for every character typed. Instead we'd like to wait, and then process the whole result.
+Der er ingen pointe i at sende forespørgslen for hver tastetryk. I stedet vil vi vente og så behandle hele resultatet.
 
-In a web-browser, we can setup an event handler -- a function that's called on every change of an input field. Normally, an event handler is called very often, for every typed key. But if we `debounce` it by 1000ms, then it will be only called once, after 1000ms after the last input.
+ en webbrowser kan vi opsætte en event handler -- en funktion der kaldes ved hver ændring af et inputfelt. Normalt kaldes en event handler meget ofte, for hver tastetryk. Men hvis vi `debounce` den med 1000ms, vil den kun blive kaldt én gang, efter 1000ms efter det sidste input.
 
 ```online
 
-In this live example, the handler puts the result into a box below, try it:
+I dette live eksempel sætter handleren resultatet i en boks nedenfor, prøv det:
 
 [iframe border=1 src="debounce" height=200]
 
-See? The second input calls the debounced function, so its content is processed after 1000ms from the last input.
+Kan du se effekten? Det andet input kalder den debounced funktion, så dens indhold behandles efter 1000ms fra det sidste input.
 ```
 
-So, `debounce` is a great way to process a sequence of events: be it a sequence of key presses, mouse movements or something else.
+Så `debounce` er en god måde at processere en række af events: en sekvens at tastetryk, musbevægelser eller andet.
 
-It waits the given time after the last call, and then runs its function, that can process the result.
+Den venter en given tid efter det sidste kald, og så kører den sin funktion, som kan behandle resultatet.
 
-The task is to implement `debounce` decorator.
+Din opgave er at implementere en `debounce` decorator.
 
-Hint: that's just a few lines if you think about it :)
+Hint: det er egentlig kun et par linjer hvis man tænker over det :)
