@@ -2,11 +2,11 @@ importance: 5
 
 ---
 
-# Output every second
+# Output hvert sekund
 
-Write a function `printNumbers(from, to)` that outputs a number every second, starting from `from` and ending with `to`.
+Skriv en funktion `printNumbers(from, to)` som udskriver et tal hvert sekund, startende fra `from` og afslutning med `to`.
 
-Make two variants of the solution.
+Lav to varianter af løsningen.
 
-1. Using `setInterval`.
-2. Using nested `setTimeout`.
+1. Brug `setInterval`.
+2. Brug indlejret `setTimeout`.
