@@ -2,13 +2,13 @@ importance: 5
 
 ---
 
-# Fix a function that loses "this"
+# Fix en funktion der mister "this"
 
-The call to `askPassword()` in the code below should check the password and then call `user.loginOk/loginFail` depending on the answer.
+Kaldet til `askPassword()` i koden nedenfor skal tjekke passwordet og derefter kalde `user.loginOk/loginFail` afhængigt af svaret.
 
-But it leads to an error. Why?
+Men det fører til en fejl. Hvorfor?
 
-Fix the highlighted line for everything to start working right (other lines are not to be changed).
+Fix den fremhævede linje for at alt skal virke korrekt (andre linjer skal ikke ændres).
 
 ```js run
 function askPassword(ok, fail) {
@@ -21,11 +21,11 @@ let user = {
   name: 'John',
 
   loginOk() {
-    alert(`${this.name} logged in`);
+    alert(`${this.name} logget ind`);
   },
 
   loginFail() {
-    alert(`${this.name} failed to log in`);
+    alert(`${this.name} fejl i log in`);
   },
 
 };

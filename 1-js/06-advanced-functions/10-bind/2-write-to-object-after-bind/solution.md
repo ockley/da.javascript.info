@@ -1,4 +1,4 @@
-The answer: `null`.
+Svaret er: `null`.
 
 
 ```js run
@@ -13,6 +13,6 @@ let user = {
 user.g();
 ```
 
-The context of a bound function is hard-fixed. There's just no way to further change it.
+Konteksten for en bundet funktion er fikseret. Der er ingen måde at ændre den yderligere.
 
-So even while we run `user.g()`, the original function is called with `this=null`.
+Så selv når vi kører `user.g()`, kaldes den originale funktion med `this=null`.

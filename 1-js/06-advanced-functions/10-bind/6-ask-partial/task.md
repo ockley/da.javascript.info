@@ -4,11 +4,11 @@ importance: 5
 
 # Partial application for login
 
-The task is a little more complex variant of <info:task/question-use-bind>. 
+Denne opgave er en lidt mere kompleks variant af <info:task/question-use-bind>. 
 
-The `user` object was modified. Now instead of two functions `loginOk/loginFail`, it has a single function `user.login(true/false)`.
+`user` objektet er ændret. Nu har den, i stedet for to funktioner `loginOk/loginFail`, én enkelt funktion `user.login(true/false)`.
 
-What should we pass `askPassword` in the code below, so that it calls `user.login(true)` as `ok` and `user.login(false)` as `fail`?
+Hvad skal vi sende til `askPassword` i koden nedenfor, så den kalder `user.login(true)` som `ok` og `user.login(false)` som `fail`?
 
 ```js
 function askPassword(ok, fail) {
@@ -30,5 +30,5 @@ askPassword(?, ?); // ?
 */!*
 ```
 
-Your changes should only modify the highlighted fragment.
+Din ændring skal kun ændre den fremhævede linje.
 

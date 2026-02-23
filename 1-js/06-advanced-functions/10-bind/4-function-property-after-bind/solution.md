@@ -1,4 +1,4 @@
-The answer: `undefined`.
+Svaret er: `undefined`.
 
-The result of `bind` is another object. It does not have the `test` property.
+Resultatet af `bind` er et andet objekt. Det har ikke egenskaben `test`.
 
