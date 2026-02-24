@@ -1,45 +1,45 @@
 
-# Property getters and setters
+# Getters og setters for egenskaber
 
-There are two kinds of object properties.
+Der er to typer af objektegenskaber.
 
-The first kind is *data properties*. We already know how to work with them. All properties that we've been using until now were data properties.
+Den første type er *data egenskaber*. Vi ved allerede hvordan man arbejder med dem. Alle egenskaber, som vi har brugt indtil nu, var data egenskaber.
 
-The second type of property is something new. It's an *accessor property*. They are essentially functions that execute on getting and setting a value, but look like regular properties to an external code.
+Den anden type er *accessor egenskaber*. De er faktisk funktioner, der kører ved læsning og skrivning af en værdi, men ser ud som normale egenskaber for ekstern kode.
 
-## Getters and setters
+## Getters og setters
 
-Accessor properties are represented by "getter" and "setter" methods. In an object literal they are denoted by `get` and `set`:
+Accessor egenskaber er repræsenteret ved "getter" og "setter" metoder. I en objekt-literal bliver de betegnet med `get` og `set`:
 
 ```js
 let obj = {
   *!*get propName()*/!* {
-    // getter, the code executed on getting obj.propName
+    // getter, koden afvikles når værdien i obj.propName læses
   },
 
   *!*set propName(value)*/!* {
-    // setter, the code executed on setting obj.propName = value
+    // setter, koden afvikles når værdien i obj.propName sættes
   }
 };
 ```
 
-The getter works when `obj.propName` is read, the setter -- when it is assigned.
+Getter virker når `obj.propName` læses, setter virker når `obj.propName = value` sættes.
 
-For instance, we have a `user` object with `name` and `surname`:
+Hvis vi for eksempel har et `user` objekt med `name` og `surname`:
 
 ```js
 let user = {
-  name: "John",
-  surname: "Smith"
+  name: "Karsten",
+  surname: "Vestergaard"
 };
 ```
 
-Now we want to add a `fullName` property, that should be `"John Smith"`. Of course, we don't want to copy-paste existing information, so we can implement it as an accessor:
+Nu vil vi gerne have en egenskab kaldet `fullName`, som skal være `"Karsten Vestergaard"`. Selvfølgelig vil vi ikke kopiere eksisterende information, så vi kan implementere det som en accessor:
 
 ```js run
 let user = {
-  name: "John",
-  surname: "Smith",
+  name: "Karsten",
+  surname: "Vestergaard",
 
 *!*
   get fullName() {
@@ -49,13 +49,13 @@ let user = {
 };
 
 *!*
-alert(user.fullName); // John Smith
+alert(user.fullName); // Karsten Vestergaard
 */!*
 ```
 
-From the outside, an accessor property looks like a regular one. That's the idea of accessor properties. We don't *call* `user.fullName` as a function, we *read* it normally: the getter runs behind the scenes.
+Udefra ligner en accessor egenskab en helt normal egenskab - det er hele ideen med accessor egenskaber. Vi *kalder ikke* `user.fullName` som en funktion, vi *læser den* som en normal værdi: Getter'en virker bag scenetæppet.
 
-As of now, `fullName` has only a getter. If we attempt to assign `user.fullName=`, there will be an error:
+For nu har `fullName` kun en getter. Hvis vi prøver at tildele `user.fullName = value`, vil der være en fejl, fordi der ikke er nogen setter:
 
 ```js run
 let user = {
@@ -65,16 +65,16 @@ let user = {
 };
 
 *!*
-user.fullName = "Test"; // Error (property has only a getter)
+user.fullName = "Test"; // Fejl (egenskaben har kun en getter)
 */!*
 ```
 
-Let's fix it by adding a setter for `user.fullName`:
+Lad og fikse det ved at tilføje en setter for `user.fullName`:
 
 ```js run
 let user = {
-  name: "John",
-  surname: "Smith",
+  name: "Karsten",
+  surname: "Vestergaard",
 
   get fullName() {
     return `${this.name} ${this.surname}`;
@@ -87,34 +87,34 @@ let user = {
 */!*
 };
 
-// set fullName is executed with the given value.
+// set fullName bliver afviklet når en værdi tildeles.
 user.fullName = "Alice Cooper";
 
 alert(user.name); // Alice
 alert(user.surname); // Cooper
 ```
 
-As the result, we have a "virtual" property `fullName`. It is readable and writable.
+Som resultat har vi en "virtuel" egenskab `fullName`. Den er læsbar og skrivbar udadtil, men skjuler den indre struktur af `user` objektet, som består af `name` og `surname`. Det er en af de vigtigste fordele ved accessor egenskaber: De giver os mulighed for at abstrahere og skjule den indre struktur af data.
 
 ## Accessor descriptors
 
-Descriptors for accessor properties are different from those for data properties.
+Descriptors for accessor egenskaber er anderledes end dem for data egenskaber.
 
-For accessor properties, there is no `value` or `writable`, but instead there are `get` and `set` functions.
+For accessor egenskaber er der ingen `value` eller `writable`. I stedet er der `get` og `set` funktioner.
 
-That is, an accessor descriptor may have:
+Samlet set har en accessor descriptor følgende:
 
-- **`get`** -- a function without arguments, that works when a property is read,
-- **`set`** -- a function with one argument, that is called when the property is set,
-- **`enumerable`** -- same as for data properties,
-- **`configurable`** -- same as for data properties.
+- **`get`** -- en funktion uden argumenter, der kører når en egenskab læses,
+- **`set`** -- en funktion med ét argument, der kører når en egenskab sættes,
+- **`enumerable`** -- samme som for data egenskaber,
+- **`configurable`** -- samme som for data egenskaber.
 
-For instance, to create an accessor `fullName` with `defineProperty`, we can pass a descriptor with `get` and `set`:
+Hvis vi vil skabe en accessor `fullName` med `defineProperty` skal vi videregive en descriptor med `get` og `set`:
 
 ```js run
 let user = {
-  name: "John",
-  surname: "Smith"
+  name: "Karsten",
+  surname: "Vestergaard"
 };
 
 *!*
@@ -129,18 +129,18 @@ Object.defineProperty(user, 'fullName', {
 */!*
 });
 
-alert(user.fullName); // John Smith
+alert(user.fullName); // Karsten Vestergaard
 
 for(let key in user) alert(key); // name, surname
 ```
 
-Please note that a property can be either an accessor (has `get/set` methods) or a data property (has a `value`), not both.
+Bemærk at en egenskab kan enten være en accessor (har `get/set` metoder) eller en data egenskab (har en `value`), ikke begge dele.
 
-If we try to supply both `get` and `value` in the same descriptor, there will be an error:
+Hvis vi forsøger at give både `get` og `value` i samme descriptor, vil der være en fejl, fordi det er umuligt at have en egenskab, der både er en accessor og en data egenskab.:
 
 ```js run
 *!*
-// Error: Invalid property descriptor.
+// Fejl: Ugyldig descriptor.
 */!*
 Object.defineProperty({}, 'prop', {
   get() {
@@ -151,11 +151,11 @@ Object.defineProperty({}, 'prop', {
 });
 ```
 
-## Smarter getters/setters
+## Smartere getters/setters
 
-Getters/setters can be used as wrappers over "real" property values to gain more control over operations with them.
+Getters/setters kan bruges som wrappers over "reelle" egenskabsværdier for at få mere kontrol over operationer med dem.
 
-For instance, if we want to forbid too short names for `user`, we can have a setter `name` and keep the value in a separate property `_name`:
+For eksempel, hvis vi vil forbyde for korte navne for `user`, kan vi have en setter `name` og gemme værdien i en separat egenskab `_name`:
 
 ```js run
 let user = {
@@ -165,29 +165,29 @@ let user = {
 
   set name(value) {
     if (value.length < 4) {
-      alert("Name is too short, need at least 4 characters");
+      alert("Navnet er for kort. Det skal have mindst 4 tegn");
       return;
     }
     this._name = value;
   }
 };
 
-user.name = "Pete";
-alert(user.name); // Pete
+user.name = "Henrik";
+alert(user.name); // Henrik
 
-user.name = ""; // Name is too short...
+user.name = ""; // Navnet er for kort...
 ```
 
-So, the name is stored in `_name` property, and the access is done via getter and setter.
+Så navnet er gemt i egenskaben `_name`, og adgangen sker via getter og setter.
 
-Technically, external code is able to access the name directly by using `user._name`. But there is a widely known convention that properties starting with an underscore `"_"` are internal and should not be touched from outside the object.
+Teknisk set er udvendig kode i stand til at tilgå navnet direkte ved brug af `user._name`. Men der er en bredt anerkendt konvention om, at egenskaber, der starter med et understreg `"_"` er interne og ikke bør røres fra uden for objektet.
 
 
 ## Using for compatibility
 
-One of the great uses of accessors is that they allow to take control over a "regular" data property at any moment by replacing it with a getter and a setter and tweak its behavior.
+En af de store fordele ved accessors er, at de giver os mulighed for at tage kontrol over en "almindelig" data egenskab på et hvilket som helst tidspunkt ved at erstatte den med en getter og en setter og tilpasse dens adfærd.
 
-Imagine we started implementing user objects using data properties `name` and `age`:
+Forestil dig, at vi startede med at implementere brugerobjekter ved brug af data egenskaber `name` og `age`:
 
 ```js
 function User(name, age) {
@@ -200,7 +200,7 @@ let john = new User("John", 25);
 alert( john.age ); // 25
 ```
 
-...But sooner or later, things may change. Instead of `age` we may decide to store `birthday`, because it's more precise and convenient:
+...men på et tidspunkt kan tingene ændre sig. I stedet for `age` kan vi beslutte os for at gemme `birthday`, fordi det er mere præcist og praktisk at have. Så vi ændrer `User` konstruktøren:
 
 ```js
 function User(name, birthday) {
@@ -211,13 +211,13 @@ function User(name, birthday) {
 let john = new User("John", new Date(1992, 6, 1));
 ```
 
-Now what to do with the old code that still uses `age` property?
+Hvad gør vi nu med den gamle kode der stadig bruger `age` egenskaben?
 
-We can try to find all such places and fix them, but that takes time and can be hard to do if that code is used by many other people. And besides, `age` is a nice thing to have in `user`, right?
+Vi kan forsøge at finde alle disse steder og fikse dem, men det tager tid og kan være svært at gøre, hvis koden bruges af mange andre personer. Og desuden er `age` en dejlig ting at have i `user`, ikke sandt?
 
-Let's keep it.
+Lad os beholde den.
 
-Adding a getter for `age` solves the problem:
+Tilføj en getter for `age` som løsning på problemet:
 
 ```js run no-beautify
 function User(name, birthday) {
@@ -225,7 +225,7 @@ function User(name, birthday) {
   this.birthday = birthday;
 
 *!*
-  // age is calculated from the current date and birthday
+  // age beregnes fra den nuværende dato og fødselsdagen
   Object.defineProperty(this, "age", {
     get() {
       let todayYear = new Date().getFullYear();
@@ -237,8 +237,8 @@ function User(name, birthday) {
 
 let john = new User("John", new Date(1992, 6, 1));
 
-alert( john.birthday ); // birthday is available
-alert( john.age );      // ...as well as the age
+alert( john.birthday ); // birthday er tilgængelig
+alert( john.age );      // ...det samme er age
 ```
 
-Now the old code works too and we've got a nice additional property.
+Nu vil den gamle kode stadig virke og vi har fået en ny, brugbar egenskab.
