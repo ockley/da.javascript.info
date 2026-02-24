@@ -1,44 +1,45 @@
 
-# Property flags and descriptors
+# Flag og beskrivelser for objektegenskaber
 
-As we know, objects can store properties.
+Som vi allerede ved, kan objekter gemme egenskaber.
 
-Until now, a property was a simple "key-value" pair to us. But an object property is actually a more flexible and powerful thing.
+Indtil nu har en egenskab været en simpel "nøgle-værdi" par for os. Men en objektegenskab er faktisk mere fleksibel og kraftig.
 
-In this chapter we'll study additional configuration options, and in the next we'll see how to invisibly turn them into getter/setter functions.
+I denne kapitel vil vi studere yderligere konfigurationsmuligheder, og i næste kapitel vil vi se hvordan vi kan skjulte omgøre dem til getter/setter funktioner.
 
-## Property flags
+## Egenskabsflag
 
-Object properties, besides a **`value`**, have three special attributes (so-called "flags"):
+Objektegenskaber har, udover en **`værdi`**, tre specielle attributter (såkaldte "flag"):
 
-- **`writable`** -- if `true`, the value can be changed, otherwise it's read-only.
-- **`enumerable`** -- if `true`, then listed in loops, otherwise not listed.
-- **`configurable`** -- if `true`, the property can be deleted and these attributes can be modified, otherwise not.
+- **`writable`** -- hvis `true`, kan værdien ændres, ellers er den skrivebeskyttet.
+- **`enumerable`** -- hvis `true`, vises egenskaben i løkker, ellers ikke.
+- **`configurable`** -- hvis `true`, kan egenskaben slettes og disse attributter ændres, ellers ikke.
 
-We didn't see them yet, because generally they do not show up. When we create a property "the usual way", all of them are `true`. But we also can change them anytime.
+Vi har ikke set dem endnu, fordi de normalt ikke giver sig til kende. Når vi opretter en egenskab "på den sædvanlige måde", sættes de alle til `true`. Men vi kan ændre dem når som helst.
 
-First, let's see how to get those flags.
+Lad os først se hvordan vi får adgang til disse flag.
 
-The method [Object.getOwnPropertyDescriptor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor) allows to query the *full* information about a property.
+Metoden [Object.getOwnPropertyDescriptor](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptor) tillader os at hente *fuld* information om en egenskab.
 
-The syntax is:
+Syntaksen er:
+
 ```js
 let descriptor = Object.getOwnPropertyDescriptor(obj, propertyName);
 ```
 
 `obj`
-: The object to get information from.
+: Det objekt der skal hentes information fra.
 
 `propertyName`
-: The name of the property.
+: Navnet på egenskaben.
 
-The returned value is a so-called "property descriptor" object: it contains the value and all the flags.
+Værdien der returneres er et såkaldt "property descriptor" objekt: det indeholder værdien og alle dens flag.
 
-For instance:
+For eksempel, her er en egenskab `name` i objektet `user`:
 
 ```js run
 let user = {
-  name: "John"
+  name: "Asta"
 };
 
 let descriptor = Object.getOwnPropertyDescriptor(user, 'name');
@@ -46,7 +47,7 @@ let descriptor = Object.getOwnPropertyDescriptor(user, 'name');
 alert( JSON.stringify(descriptor, null, 2 ) );
 /* property descriptor:
 {
-  "value": "John",
+  "value": "Asta",
   "writable": true,
   "enumerable": true,
   "configurable": true
@@ -54,30 +55,30 @@ alert( JSON.stringify(descriptor, null, 2 ) );
 */
 ```
 
-To change the flags, we can use [Object.defineProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty).
+For at ændre flagene, kan vi bruge [Object.defineProperty](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperty).
 
-The syntax is:
+Syntaksen er:
 
 ```js
 Object.defineProperty(obj, propertyName, descriptor)
 ```
 
 `obj`, `propertyName`
-: The object and its property to apply the descriptor.
+: Det objekt og dets egenskab som beskrivelsen skal anvendes på.
 
 `descriptor`
-: Property descriptor object to apply.
+: Et property descriptor objekt som skal anvendes.
 
-If the property exists, `defineProperty` updates its flags. Otherwise, it creates the property with the given value and flags; in that case, if a flag is not supplied, it is assumed `false`.
+Hvis en egen egenskab eksisterer, opdaterer `defineProperty` dens flag. Hvis den ikke eksisterer, opretter den egenskaben med den givne værdi og sætter dens flag; i så fald antages det, at et flag som ikke er angivet er `false`.
 
-For instance, here a property `name` is created with all falsy flags:
+For eksempel, her oprettes en egenskab `name` med alle falske flag:
 
 ```js run
 let user = {};
 
 *!*
 Object.defineProperty(user, "name", {
-  value: "John"
+  value: "Asta"
 });
 */!*
 
@@ -86,7 +87,7 @@ let descriptor = Object.getOwnPropertyDescriptor(user, 'name');
 alert( JSON.stringify(descriptor, null, 2 ) );
 /*
 {
-  "value": "John",
+  "value": "Asta",
 *!*
   "writable": false,
   "enumerable": false,
@@ -96,17 +97,17 @@ alert( JSON.stringify(descriptor, null, 2 ) );
  */
 ```
 
-Compare it with "normally created" `user.name` above: now all flags are falsy. If that's not what we want then we'd better set them to `true` in `descriptor`.
+Sammenlign det med "normalt oprettede" `user.name` ovenfor: nu er alle flag falske. Hvis det ikke er hvad vi vil, så bør vi sætte dem til `true` i `descriptor`.
 
-Now let's see effects of the flags by example.
+Lad os se på effekterne af flagene ved eksempel.
 
-## Non-writable
+## Skrivebeskyttede egenskaber (Non-writable)
 
-Let's make `user.name` non-writable (can't be reassigned) by changing `writable` flag:
+Lad os gøre `user.name` skrivebeskyttet ved at ændre `writable` flag:
 
 ```js run
 let user = {
-  name: "John"
+  name: "Asta"
 };
 
 Object.defineProperty(user, "name", {
@@ -116,57 +117,57 @@ Object.defineProperty(user, "name", {
 });
 
 *!*
-user.name = "Pete"; // Error: Cannot assign to read only property 'name'
+user.name = "Mikkel"; // Error: Cannot assign to read only property 'name'
 */!*
 ```
 
-Now no one can change the name of our user, unless they apply their own `defineProperty` to override ours.
+Nu kan ingen ændre navnet på vores bruger, medmindre de anvender deres egen `defineProperty` til at tilsidesætte vores.
 
-```smart header="Errors appear only in strict mode"
-In non-strict mode, no errors occur when writing to non-writable properties and such. But the operation still won't succeed. Flag-violating actions are just silently ignored in non-strict.
+```smart header="Fejl sker kun i strict mode"
+I non-strict mode vil der ikke meldes fejl når du prøver at overskrive en skrivebeskyttet egenskab - men operationen vil stadig ikke ske. Egenskaben vil ikke blive overskrevet, men du får ikke nogen fejl sendt ud til konsollen i non-strict mode.
 ```
 
-Here's the same example, but the property is created from scratch:
+Her er det samme eksempel, men med en egenskab oprettet fra bunden:
 
 ```js run
 let user = { };
 
 Object.defineProperty(user, "name", {
 *!*
-  value: "John",
-  // for new properties we need to explicitly list what's true
+  value: "Asta",
+  // for nye egenskaber skal vi eksplicit sætte flagene til true
   enumerable: true,
   configurable: true
 */!*
 });
 
-alert(user.name); // John
-user.name = "Pete"; // Error
+alert(user.name); // Asta
+user.name = "Mikkel"; // Fejl
 ```
 
-## Non-enumerable
+## Ikke tælbar (Non-enumerable)
 
-Now let's add a custom `toString` to `user`.
+Lad os tilføje vores egen `toString` til `user`.
 
-Normally, a built-in `toString` for objects is non-enumerable, it does not show up in `for..in`. But if we add a `toString` of our own, then by default it shows up in `for..in`, like this:
+Normalt vil objekters indbyggede `toString` være det man kalder for `non-enumerable`. Det betyder at den ikke regnes med i løkker som `for..in`. Men, hvis vi opretter vores egen `toString`, så vises den i `for..in`, som vist her:
 
 ```js run
 let user = {
-  name: "John",
+  name: "Ulla",
   toString() {
     return this.name;
   }
 };
 
-// By default, both our properties are listed:
+// Som standard vises begge vores egenskaber i for..in:
 for (let key in user) alert(key); // name, toString
 ```
 
-If we don't like it, then we can set `enumerable:false`. Then it won't appear in a `for..in` loop, just like the built-in one:
+Hvis vi ikke vil have det til at være således kan vi sætte `enumerable:false`. Så vises den ikke i en `for..in` løkke, lige som den indbyggede `toString`:
 
 ```js run
 let user = {
-  name: "John",
+  name: "Ulla",
   toString() {
     return this.name;
   }
@@ -179,24 +180,24 @@ Object.defineProperty(user, "toString", {
 });
 
 *!*
-// Now our toString disappears:
+// Nu er vores toString forsvundet fra for..in, ligesom den indbyggede:
 */!*
 for (let key in user) alert(key); // name
 ```
 
-Non-enumerable properties are also excluded from `Object.keys`:
+Non-enumerable er også udelukket fra `Object.keys`:
 
 ```js
 alert(Object.keys(user)); // name
 ```
 
-## Non-configurable
+## ukonfigurérbare egenskaber (Non-configurable)
 
-The non-configurable flag (`configurable:false`) is sometimes preset for built-in objects and properties.
+Flaget (`configurable:false`) er ofte standard for indbyggede objekter og egenskaber.
 
-A non-configurable property can't be deleted, its attributes can't be modified.
+En ukonfigurérbare egenskab kan ikke slettes, og dens attributter kan ikke ændres.
 
-For instance, `Math.PI` is non-writable, non-enumerable and non-configurable:
+For eksempel, `Math.PI` er ikke-skrivbar, ikke-tælbar og ukonfigurérbar:
 
 ```js run
 let descriptor = Object.getOwnPropertyDescriptor(Math, 'PI');
@@ -211,28 +212,28 @@ alert( JSON.stringify(descriptor, null, 2 ) );
 }
 */
 ```
-So, a programmer is unable to change the value of `Math.PI` or overwrite it.
+Så en programmør er ikke i stand til at ændre værdien af `Math.PI` eller overskrive den.
 
 ```js run
-Math.PI = 3; // Error, because it has writable: false
+Math.PI = 3; // Fejl, fordi den har writable: false
 
-// delete Math.PI won't work either
+// delete Math.PI virker heller ikke
 ```
 
-We also can't change `Math.PI` to be `writable` again:
+Vi kan heller ikke ændre `Math.PI` til at være `writable` igen, fordi den har `configurable: false`:
 
 ```js run
-// Error, because of configurable: false
+// Fejl, på grund af configurable: false
 Object.defineProperty(Math, "PI", { writable: true });
 ```
 
-There's absolutely nothing we can do with `Math.PI`.
+Der er absolut intet vi kan gøre med `Math.PI`.
 
-Making a property non-configurable is a one-way road. We cannot change it back with `defineProperty`.
+At gøre en egenskab ukonfigurérbar er en ensrettet vej. Vi kan ikke ændre den tilbage med `defineProperty`.
 
-**Please note: `configurable: false` prevents changes of property flags and its deletion, while allowing to change its value.**
+**Bemærk: `configurable: false` forhindrer ændring af egenskabens flag og sletning mens muligheden for at ændre værdien bevares.**
 
-Here `user.name` is non-configurable, but we can still change it (as it's writable):
+Her er `user.name` ukonfigurérbar, men vi kan stadig ændre den (fordi den er skrivbar):
 
 ```js run
 let user = {
@@ -243,15 +244,15 @@ Object.defineProperty(user, "name", {
   configurable: false
 });
 
-user.name = "Pete"; // works fine
-delete user.name; // Error
+user.name = "Peter"; // Virker fint
+delete user.name; // Fejl
 ```
 
-And here we make `user.name` a "forever sealed" constant, just like the built-in `Math.PI`:
+Og her gør vi `user.name` til en "for evigt lukket" konstant, lige som den indbyggede `Math.PI`:
 
 ```js run
 let user = {
-  name: "John"
+  name: "Karsten"
 };
 
 Object.defineProperty(user, "name", {
@@ -259,24 +260,25 @@ Object.defineProperty(user, "name", {
   configurable: false
 });
 
-// won't be able to change user.name or its flags
-// all this won't work:
-user.name = "Pete";
+// vi kan ikke ændre user.name eller dens flag
+// alt dette vil ikke virke:
+user.name = "Lisbeth";
 delete user.name;
-Object.defineProperty(user, "name", { value: "Pete" });
+Object.defineProperty(user, "name", { value: "Lisbeth" });
 ```
 
-```smart header="The only attribute change possible: writable true -> false"
-There's a minor exception about changing flags.
+```smart header="Den eneste vej egenskaben kan ændres: writable true -> false"
+Der er en lille undtagelse ved ændring af flag.
 
-We can change `writable: true` to `false` for a non-configurable property, thus preventing its value modification (to add another layer of protection). Not the other way around though.
+Vi kan ændre `writable: true` til `false` for en ukonfigurérbar egenskab, så den ikke kan ændres (for at tilføje et ekstra lag af beskyttelse). Men ikke omvendt.
+
 ```
 
 ## Object.defineProperties
 
-There's a method [Object.defineProperties(obj, descriptors)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) that allows to define many properties at once.
+Metoden [Object.defineProperties(obj, descriptors)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/defineProperties) tillader at definere mange egenskaber på én gang.
 
-The syntax is:
+Syntaksen er:
 
 ```js
 Object.defineProperties(obj, {
@@ -286,29 +288,29 @@ Object.defineProperties(obj, {
 });
 ```
 
-For instance:
+For eksempel, her opretter vi to egenskaber `name` og `surname` på én gang:
 
 ```js
 Object.defineProperties(user, {
-  name: { value: "John", writable: false },
-  surname: { value: "Smith", writable: false },
+  name: { value: "Karsten", writable: false },
+  surname: { value: "Vestergaard", writable: false },
   // ...
 });
 ```
 
-So, we can set many properties at once.
+Så vi kan sætte mange egenskaber på én gang.
 
 ## Object.getOwnPropertyDescriptors
 
-To get all property descriptors at once, we can use the method [Object.getOwnPropertyDescriptors(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptors).
+For at hente alle egenskabsbeskrivelser på én gang, kan vi bruge metoden [Object.getOwnPropertyDescriptors(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/getOwnPropertyDescriptors).
 
-Together with `Object.defineProperties` it can be used as a "flags-aware" way of cloning an object:
+Sammen med `Object.defineProperties` kan den bruges som en "flags-aware" måde at klone et objekt på:
 
 ```js
 let clone = Object.defineProperties({}, Object.getOwnPropertyDescriptors(obj));
 ```
 
-Normally when we clone an object, we use an assignment to copy properties, like this:
+Normalt når vi kloner et objekt, bruger vi en tildeling for at kopiere egenskaberne, som dette:
 
 ```js
 for (let key in user) {
@@ -316,34 +318,34 @@ for (let key in user) {
 }
 ```
 
-...But that does not copy flags. So if we want a "better" clone then `Object.defineProperties` is preferred.
+...Men det kopierer ikke flag. Så hvis vi vil have en "bedre" klon, så er `Object.defineProperties` foretrukket.
 
-Another difference is that `for..in` ignores symbolic and non-enumerable properties, but `Object.getOwnPropertyDescriptors` returns *all* property descriptors including symbolic and non-enumerable ones.
+En anden forskel er at `for..in` ignorerer symboliske og ikke-tælbare egenskaber, men `Object.getOwnPropertyDescriptors` returnerer *alle* egenskabsbeskrivelser inklusiv symboliske og ikke-antalige egenskaber.
 
-## Sealing an object globally
+## Global forsegling af et objekt
 
-Property descriptors work at the level of individual properties.
+Egenskabsbeskrivelser virker på niveauet for individuelle egenskaber.
 
-There are also methods that limit access to the *whole* object:
+Der er også metoder, der begrænser adgangen til *hele* objektet:
 
 [Object.preventExtensions(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/preventExtensions)
-: Forbids the addition of new properties to the object.
+: Forbyder tilføjelsen af nye egenskaber til objektet.
 
 [Object.seal(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/seal)
-: Forbids adding/removing of properties. Sets `configurable: false` for all existing properties.
+: Forbyder tilføjelse/fjernelse af egenskaber. Sætter `configurable: false` for alle eksisterende egenskaber.
 
 [Object.freeze(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/freeze)
-: Forbids adding/removing/changing of properties. Sets `configurable: false, writable: false` for all existing properties.
+: Forbider tilføjelse/fjernelse/ændring af egenskaber. Sætter `configurable: false, writable: false` for alle eksisterende egenskaber.
 
-And also there are tests for them:
+Der er også mulighed for at test om de er forseglet:
 
 [Object.isExtensible(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isExtensible)
-: Returns `false` if adding properties is forbidden, otherwise `true`.
+: Returnerer `false` hvis tilføjelse af egenskaber er forbudt, ellers `true`.
 
 [Object.isSealed(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isSealed)
-: Returns `true` if adding/removing properties is forbidden, and all existing properties have `configurable: false`.
+: Returnerer `true` hvis tilføjelse/fjernelse af egenskaber er forbudt, og alle eksisterende egenskaber har `configurable: false`.
 
 [Object.isFrozen(obj)](https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/isFrozen)
-: Returns `true` if adding/removing/changing properties is forbidden, and all current properties are `configurable: false, writable: false`.
+: Returnerer `true` hvis tilføjelse/fjernelse/ændring af egenskaber er forbudt, og alle eksisterende egenskaber har `configurable: false, writable: false`.
 
-These methods are rarely used in practice.
+Disse metoder bruges meget sjældent i praksis.

@@ -1,1 +1,1 @@
-# Advanced working with functions
+# Avanceret arbejde med funktioner

@@ -1,3 +1,3 @@
-# Object properties configuration
+# Konfiguration af egenskaber for objekt
 
-In this section we return to objects and study their properties even more in-depth.
+I denne sektion vender vi tilbage til objekter og studerer deres egenskaber mere grundigt.
