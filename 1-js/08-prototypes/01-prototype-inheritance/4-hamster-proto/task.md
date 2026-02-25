@@ -2,11 +2,11 @@ importance: 5
 
 ---
 
-# Why are both hamsters full?
+# Hvorfor er begge hamstere fyldte?
 
-We have two hamsters: `speedy` and `lazy` inheriting from the general `hamster` object. 
+Vi har to hamstre: `speedy` og `lazy` der nedarver fra det generelle `hamster` objekt. 
 
-When we feed one of them, the other one is also full. Why? How can we fix it?
+Når vi foder en af dem, er den anden også mæt. Hvorfor? Hvordan kan vi fikse det?
 
 ```js run
 let hamster = {
@@ -25,11 +25,11 @@ let lazy = {
   __proto__: hamster
 };
 
-// This one found the food
-speedy.eat("apple");
-alert( speedy.stomach ); // apple
+// Denne her fandt noget mad
+speedy.eat("æble");
+alert( speedy.stomach ); // æble
 
-// This one also has it, why? fix please.
-alert( lazy.stomach ); // apple
+// Denne her har den også, hvorfor? Kan du fikse det, tak.
+alert( lazy.stomach ); // æble
 ```
 

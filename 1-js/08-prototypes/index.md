@@ -1,1 +1,1 @@
-# Prototypes, inheritance
+# Prototyper, nedarvning

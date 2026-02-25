@@ -1,7 +1,7 @@
-**The answer: `rabbit`.**
+**Svaret er: `rabbit`.**
 
-That's because `this` is an object before the dot, so `rabbit.eat()` modifies `rabbit`.
+Det er fordi `this` er objektet før punktummet, så `rabbit.eat()` ændrer `rabbit`.
 
-Property lookup and execution are two different things.
+Opslag af egenskaber og eksekvering er to forskellige ting.
 
-The method `rabbit.eat` is first found in the prototype, then executed with `this=rabbit`.
+Metoden `rabbit.eat` findes først i prototypen, og derefter eksekveres den med `this=rabbit`.

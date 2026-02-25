@@ -1,4 +1,5 @@
 
-1. `true`, taken from `rabbit`.
-2. `null`, taken from `animal`.
-3. `undefined`, there's no such property any more.
+1. `true`, tages fra `rabbit`.
+2. `null`, tages fra `animal`.
+3. `undefined`, der er ikke længere en sådan egenskab.
+

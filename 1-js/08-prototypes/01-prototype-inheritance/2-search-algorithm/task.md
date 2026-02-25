@@ -2,11 +2,11 @@ importance: 5
 
 ---
 
-# Searching algorithm
+# Søgealgoritme
 
-The task has two parts.
+Opgaven har to dele.
 
-Given the following objects:
+Givet følgende objekter:
 
 ```js
 let head = {
@@ -27,5 +27,5 @@ let pockets = {
 };
 ```
 
-1. Use `__proto__` to assign prototypes in a way that any property lookup will follow the path: `pockets` -> `bed` -> `table` -> `head`. For instance, `pockets.pen` should be `3` (found in `table`), and `bed.glasses` should be `1` (found in `head`).
-2. Answer the question: is it faster to get `glasses` as `pockets.glasses` or `head.glasses`? Benchmark if needed.
+1. Brug `__proto__` til at tildele prototyper på en måde, så enhver egenskabsopslag følger stien: `pockets` -> `bed` -> `table` -> `head`. For eksempel, `pockets.pen` skal være `3` (fundet i `table`), og `bed.glasses` skal være `1` (fundet i `head`).
+2. Besvar spørgsmålet: er det hurtigere at få `glasses` som `pockets.glasses` eller `head.glasses`? Benchmark hvis nødvendigt.
