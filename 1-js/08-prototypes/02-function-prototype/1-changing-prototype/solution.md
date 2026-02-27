@@ -1,20 +1,20 @@
 
-Answers:
+Svarene er:
 
 1. `true`. 
 
-    The assignment to `Rabbit.prototype` sets up `[[Prototype]]` for new objects, but it does not affect the existing ones. 
+    Tildelingen til `Rabbit.prototype` sætter `[[Prototype]]` for nye objekter, men påvirker ikke eksisterende objekter. Så `rabbit` har stadig den gamle prototype, hvor `eats` er `true`.
 
 2. `false`. 
 
-    Objects are assigned by reference. The object from `Rabbit.prototype` is not duplicated, it's still a single object referenced both by `Rabbit.prototype` and by the `[[Prototype]]` of `rabbit`. 
+    Objekter bliver tildelt med reference til det oprindelige objekt. Objektet fra `Rabbit.prototype` er ikke kopieret, det er stadig et enkelt objekt refereret både af `Rabbit.prototype` og af `[[Prototype]]` på `rabbit`.
 
-    So when we change its content through one reference, it is visible through the other one.
+    Så når vi ændrer dets indhold via én reference, er det synligt via den anden reference.
 
 3. `true`.
 
-    All `delete` operations are applied directly to the object. Here `delete rabbit.eats` tries to remove `eats` property from `rabbit`, but it doesn't have it. So the operation won't have any effect.
+    Alle `delete` operationer udføres direkte på objektet. Her forsøger `delete rabbit.eats` at fjerne `eats` egenskaben fra `rabbit`, men det har ikke den egenskab. Så operationen har ingen effekt.
 
 4. `undefined`.
 
-    The property `eats` is deleted from the prototype, it doesn't exist any more.
+    Egenskaben `eats` er slettet fra prototypen, den eksisterer ikke længere.
