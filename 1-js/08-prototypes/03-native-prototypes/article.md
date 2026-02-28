@@ -1,33 +1,33 @@
-# Native prototypes
+# Indbyggede prototyper (native prototypes)
 
-The `"prototype"` property is widely used by the core of JavaScript itself. All built-in constructor functions use it.
+Egenskaben `"prototype"` er meget brugt i JavaScript-kernen. Alle indbyggede konstruktør-funktioner bruger den.
 
-First we'll look at the details, and then how to use it for adding new capabilities to built-in objects.
+Lad os først se på et par detaljer, og så hvordan man bruger den til at tilføje nye evner til indbyggede objekter.
 
 ## Object.prototype
 
-Let's say we output an empty object:
+Lad os antage at vi vil outputte et tomt objekt:
 
 ```js run
 let obj = {};
 alert( obj ); // "[object Object]" ?
 ```
 
-Where's the code that generates the string `"[object Object]"`? That's a built-in `toString` method, but where is it? The `obj` is empty!
+Hvor er den kode der genererer strengen `"[object Object]"`? Det er en indbygget `toString`-metode, men hvor er den? Det tomme objekt `obj` har ingen `toString`-metode.
 
-...But the short notation `obj = {}` is the same as `obj = new Object()`, where `Object` is a built-in object constructor function, with its own `prototype` referencing a huge object with `toString` and other methods.
+...Men den korte notation `obj = {}` er det samme som `obj = new Object()`, hvor `Object` er en indbygget objekt konstruktør funktion, med sin egen `prototype` der refererer til et stort objekt med `toString` og andre metoder.
 
-Here's what's going on:
+Her er hvad der sker:
 
 ![](object-prototype.svg)
 
-When `new Object()` is called (or a literal object `{...}` is created), the `[[Prototype]]` of it is set to `Object.prototype` according to the rule that we discussed in the previous chapter:
+Når `new Object()` kaldes (eller et literalt objekt `{...}` skabes), så sættes`[[Prototype]]` til væriden af `Object.prototype` ifølge reglen vi diskuterede i forrige kapitel:
 
 ![](object-prototype-1.svg)
 
-So then when `obj.toString()` is called the method is taken from `Object.prototype`.
+Så når `obj.toString()` kaldes, bliver metoden taget fra `Object.prototype`.
 
-We can check it like this:
+Vi kan tjekke det på følgende måde:
 
 ```js run
 let obj = {};
@@ -38,80 +38,80 @@ alert(obj.toString === obj.__proto__.toString); //true
 alert(obj.toString === Object.prototype.toString); //true
 ```
 
-Please note that there is no more `[[Prototype]]` in the chain above `Object.prototype`:
+Bemærk at der findes ikke flere `[[Prototype]]` i kæden over `Object.prototype`:
 
 ```js run
 alert(Object.prototype.__proto__); // null
 ```
 
-## Other built-in prototypes
+## Andre indbyggede prototyper
 
-Other built-in objects such as `Array`, `Date`, `Function` and others also keep methods in prototypes.
+Andre indbyggede objekter som `Array`, `Date`, `Function` og andre gemmer metoder i deres prototyper.
 
-For instance, when we create an array `[1, 2, 3]`, the default `new Array()` constructor is used internally. So `Array.prototype` becomes its prototype and provides methods. That's very memory-efficient.
+For eksempel, når vi opretter en array `[1, 2, 3]`, bruges den indbyggede `new Array()` konstruktør internt. Så bliver `Array.prototype` dens prototype og leverer metoder. Det er meget effektivt i forhold til hukommelsen.
 
-By specification, all of the built-in prototypes have `Object.prototype` on the top. That's why some people say that "everything inherits from objects".
+Fra specifikationen gælder det, at alle indbyggede prototyper har `Object.prototype` på toppen. Det er hvorfor nogle siger "alt nedarver fra objekter".
 
-Here's the overall picture (for 3 built-ins to fit):
+Her er et overordnet billede (af 3 indbyggede for overblikkets skyld):
 
 ![](native-prototypes-classes.svg)
 
-Let's check the prototypes manually:
+Lad os se på prototyperne manuelt:
 
 ```js run
 let arr = [1, 2, 3];
 
-// it inherits from Array.prototype?
+// Den nedarver fra Array.prototype
 alert( arr.__proto__ === Array.prototype ); // true
 
-// then from Object.prototype?
+// som nedarver fraObject.prototype
 alert( arr.__proto__.__proto__ === Object.prototype ); // true
 
-// and null on the top.
+// og med værdien null aller øverst.
 alert( arr.__proto__.__proto__.__proto__ ); // null
 ```
 
-Some methods in prototypes may overlap, for instance, `Array.prototype` has its own `toString` that lists comma-delimited elements:
+Nogle gange er der overlap i mulighederne. For eksempel har `Array.prototype` sin egen `toString` der oplister dens elementer separeret af kommaer, og `Object.prototype` har sin oprindelige `toString` der returnerer `"[object Object]"`. Hvilken en bruges?
 
 ```js run
 let arr = [1, 2, 3]
-alert(arr); // 1,2,3 <-- the result of Array.prototype.toString
+alert(arr); // 1,2,3 <-- resultatet kommer fra Array.prototype.toString
 ```
 
-As we've seen before, `Object.prototype` has `toString` as well, but `Array.prototype` is closer in the chain, so the array variant is used.
+`Object.prototype` har `toString` som den allerførste i kæden, men `Array.prototype` er tættere på vores kald, så det er den variant der benyttes.
 
 
 ![](native-prototypes-array-tostring.svg)
 
 
-In-browser tools like Chrome developer console also show inheritance (`console.dir` may need to be used for built-in objects):
+Udviklerværktøjer som Chrome developer konsollen viser også nedarvning. Skriv f.eks.`console.dir([1,2,3])` (ikke console.log) for at se et indbygget objekt:
 
 ![](console_dir_array.png)
 
-Other built-in objects also work the same way. Even functions -- they are objects of a built-in `Function` constructor, and their methods (`call`/`apply` and others) are taken from `Function.prototype`. Functions have their own `toString` too.
+Andre indbyggede objekter fungerer på samme måde. Selv funktioner -- de er objekter af den indbyggede `Function` konstruktør, og deres metoder (`call`/`apply` og andre) bliver taget fra `Function.prototype`. Funktioner har også deres egen `toString`.
 
 ```js run
 function f() {}
 
 alert(f.__proto__ == Function.prototype); // true
-alert(f.__proto__.__proto__ == Object.prototype); // true, inherit from objects
+alert(f.__proto__.__proto__ == Object.prototype); // true, nedarver fra Object
 ```
 
-## Primitives
+## Primitiver
 
-The most intricate thing happens with strings, numbers and booleans.
+En mere indviklet ting sker med strenge, tal og boolske værdier.
 
-As we remember, they are not objects. But if we try to access their properties, temporary wrapper objects are created using built-in constructors `String`, `Number` and `Boolean`. They provide the methods and disappear.
+Som vi husker, er de ikke objekter. Men hvis vi forsøger at tilgå deres egenskaber, bliver midlertidige wrapper-objekter oprettet ved brug af de indbyggede konstruktører `String`, `Number` og `Boolean`. De leverer metoderne og forsvinder igen.
 
-These objects are created invisibly to us and most engines optimize them out, but the specification describes it exactly this way. Methods of these objects also reside in prototypes, available as `String.prototype`, `Number.prototype` and `Boolean.prototype`.
+Disse objekter bliver skabt usynligt for os, og de fleste browsere optimerer dem ud, men specifikationen beskriver det præcist på denne måde. Metoderne for disse objekter befinder sig også i deres prototyper, tilgængelige som `String.prototype`, `Number.prototype` og `Boolean.prototype`.
 
-```warn header="Values `null` and `undefined` have no object wrappers"
-Special values `null` and `undefined` stand apart. They have no object wrappers, so methods and properties are not available for them. And there are no corresponding prototypes either.
+```warn header="Værdierne `null` og `undefined` har ingen objekt-wrapper"
+Specielle værdier som `null` og `undefined` er anderledes. De har ingen objekt-wrapper, så metoder og egenskaber er ikke tilgængelige for dem. Og der er ingen tilsvarende prototyper.
 ```
 
-## Changing native prototypes [#native-prototype-change]
+## Ændring af native prototyper [#native-prototype-change]
 
-Native prototypes can be modified. For instance, if we add a method to `String.prototype`,  it becomes available to all strings:
+Native prototyper kan ændres. For eksempel, hvis vi tilføjer en metode til `String.prototype`, bliver den tilgængelig for alle strenge:
 
 ```js run
 String.prototype.show = function() {
@@ -121,32 +121,32 @@ String.prototype.show = function() {
 "BOOM!".show(); // BOOM!
 ```
 
-During the process of development, we may have ideas for new built-in methods we'd like to have, and we may be tempted to add them to native prototypes. But that is generally a bad idea.
+Mens vi udvikler kan der være ideer om nye indbyggede metoder vi gerne vil have, og vi kan blive fristet til at tilføje dem til native prototyper. Men det er generelt et dårligt idé.
 
 ```warn
-Prototypes are global, so it's easy to get a conflict. If two libraries add a method `String.prototype.show`, then one of them will be overwriting the method of the other.
+Prototyper er globale, så der opstår nemt konflikter. Hvis to biblioteker tilføjer en metode `String.prototype.show`, så vil en af dem overskrive metoden i den anden.
 
-So, generally, modifying a native prototype is considered a bad idea.
+Så, generelt set, ændring af en native prototype er betragtet som et dårligt idé.
 ```
 
-**In modern programming, there is only one case where modifying native prototypes is approved. That's polyfilling.**
+**I moderne programmering er der kun ét tilfælde hvor ændring af native prototyper er godkendt. Det er polyfilling.**
 
-Polyfilling is a term for making a substitute for a method that exists in the JavaScript specification, but is not yet supported by a particular JavaScript engine.
+Polyfilling er et udtryk for at lave en erstatning for en metode der findes i JavaScript specifikationen, men endnu ikke understøttet af en bestemt JavaScript motor.
 
-We may then implement it manually and populate the built-in prototype with it.
+Her må vi manuelt implementere metoden og tilføje den til den indbyggede prototype.
 
-For instance:
+For eksempel:
 
 ```js run
-if (!String.prototype.repeat) { // if there's no such method
-  // add it to the prototype
+if (!String.prototype.repeat) { // hvis metoden ikke findes
+  // tilføje den til prototypen
 
   String.prototype.repeat = function(n) {
-    // repeat the string n times
+    // gentag en string n gange
 
-    // actually, the code should be a little bit more complex than that
-    // (the full algorithm is in the specification)
-    // but even an imperfect polyfill is often considered good enough
+    // egentlig bør koden være lidt mere kompleks end dette
+    // (se hele algoritmen i specifikationen)
+    // men nogle gange er en næsten perfekt polyfill nok
     return new Array(n + 1).join(this);
   };
 }
@@ -155,22 +155,22 @@ alert( "La".repeat(3) ); // LaLaLa
 ```
 
 
-## Borrowing from prototypes
+## Lån fra from prototyper
 
-In the chapter <info:call-apply-decorators#method-borrowing> we talked about method borrowing.
+I kapitlet <info:call-apply-decorators#method-borrowing> talte vi om at låne fra metoder.
 
-That's when we take a method from one object and copy it into another.
+Det er når vi tager en metode fra et objekt og kopierer den til et andet objekt.
 
-Some methods of native prototypes are often borrowed.
+Nogle af de indbyggede metoder i prototyper bliver ofte lånt.
 
-For instance, if we're making an array-like object, we may want to copy some `Array` methods to it.
+Hvi vi for eksempel har et array-lignende objekt, kan vi ønske at kopiere nogle `Array` metoder til det.
 
-E.g.
+I stil med dette:
 
 ```js run
 let obj = {
-  0: "Hello",
-  1: "world!",
+  0: "Hej",
+  1: "verden!",
   length: 2,
 };
 
@@ -178,21 +178,21 @@ let obj = {
 obj.join = Array.prototype.join;
 */!*
 
-alert( obj.join(',') ); // Hello,world!
+alert( obj.join(', ') ); // Hej, verden!
 ```
 
-It works because the internal algorithm of the built-in `join` method only cares about the correct indexes and the `length` property. It doesn't check if the object is indeed an array. Many built-in methods are like that.
+Det virker fordi den interne algoritme i den indbyggede `join`-metode kun bryder sig om de korrekte indekser og egenskaben `length`. Den tjekker ikke om objektet faktisk er et array. Mange indbyggede metoder er sådan.
 
-Another possibility is to inherit by setting `obj.__proto__` to `Array.prototype`, so all `Array` methods are automatically available in `obj`.
+En anden mulighed er at arve ved at sætte `obj.__proto__` til `Array.prototype`, så alle `Array`-metoder automatisk er tilgængelige i `obj`.
 
-But that's impossible if `obj` already inherits from another object. Remember, we only can inherit from one object at a time.
+Men det er umuligt hvis `obj` allerede arver fra et andet objekt. Husk, vi kan kun arve fra ét objekt ad gangen.
 
-Borrowing methods is flexible, it allows to mix functionalities from different objects if needed.
+At låne metoder er fleksibelt, det tillader os at blande funktionaliteter fra forskellige objekter hvis det er nødvendigt.
 
-## Summary
+## Opsummering
 
-- All built-in objects follow the same pattern:
-    - The methods are stored in the prototype (`Array.prototype`, `Object.prototype`, `Date.prototype`, etc.)
-    - The object itself stores only the data (array items, object properties, the date)
-- Primitives also store methods in prototypes of wrapper objects: `Number.prototype`, `String.prototype` and `Boolean.prototype`. Only `undefined` and `null` do not have wrapper objects
-- Built-in prototypes can be modified or populated with new methods. But it's not recommended to change them. The only allowable case is probably when we add-in a new standard, but it's not yet supported by the JavaScript engine
+- Alle indbyggede objekter følger samme mønster:
+    - Metoderne er gemt i prototypen (`Array.prototype`, `Object.prototype`, `Date.prototype`, etc.)
+    - Objektet selv gemmer kun data (array-elementer, objektegenskaber, datoen)
+- Primitives gemmer også metoder i prototyperne af wrapper-objekter: `Number.prototype`, `String.prototype` og `Boolean.prototype`. Kun `undefined` og `null` har ikke wrapper-objekter
+- Indbyggede prototyper kan ændres eller udfyldes med nye metoder. Men det anbefales ikke at ændre dem. Det eneste tilladte tilfælde er når vi tilføjer en ny standard, men den endnu ikke understøttes af JavaScript-motoren
